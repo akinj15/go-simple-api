@@ -6,6 +6,7 @@ import (
 )
 
 var cfg *Config
+var tokenAuth *jwtauth.JWTAuth
 
 type Config struct {
 	DBDriver      string `mapstructure:"DB_DRIVER"`
@@ -34,5 +35,9 @@ func LoadConfig(path string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
+	tokenAuth = jwtauth.New("HS256", []byte(cfg.JWTSecret), nil) // replace with secret key
+
+	cfg.TokenAuth = tokenAuth
+
 	return cfg, nil
 }
